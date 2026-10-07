@@ -21,7 +21,7 @@ int main() {
     printf("Enter number of symbols (a, b, ...): ");
     scanf("%d", &m);
 
-    printf("Enter transition table (next state for each symbol):\n");
+    printf("Enter transition table (next state for each symbol), (-1 if no transision is present for that symbol):\n");
     for (i = 0; i < n; i++) {
         printf("q%d: ", i);
         for (a = 0; a < m; a++)
@@ -34,6 +34,20 @@ int main() {
     for (i = 0; i < f; i++) {
         scanf("%d", &x);
         isFinal[x] = 1;
+    }
+
+        /* missing move (-1) goes to a dead state numbered n */
+    dead = 0;
+    for (i = 0; i < n; i++)
+        for (a = 0; a < m; a++)
+            if (next[i][a] == -1) {
+                next[i][a] = n;
+                dead = 1;
+            }
+    if (dead) {
+        for (a = 0; a < m; a++)
+            next[n][a] = n;      /* dead state loops to itself */
+        n++;
     }
 
     /* 1. final vs non-final are different */
